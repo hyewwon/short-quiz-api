@@ -29,6 +29,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
 
     'api',
@@ -146,23 +150,44 @@ REST_USE_JWT = True
 ALGORITHM = 'HS256'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days = 1, hours=0, minutes=0),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days = 60, hours=0, minutes=0),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days = 1, hours=0, minutes=0), # access token 유효기간
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days = 60, hours=0, minutes=0), # refresh token 유효기간
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': True,
+    'UPDATE_LAST_LOGIN': True, # database transaction 수 늘어남
 
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
+    "TOKEN_OBTAIN_SERIALIZER": "api.serializers.MyTokenObtainPairSerializer"
+
+    # 'VERIFYING_KEY': None,
+    # 'AUDIENCE': None,
+    # 'ISSUER': None,
+    # 'JWK_URL': None,
+    # 'LEEWAY': 0,
+
+    # 'AUTH_HEADER_TYPES': ('Bearer',),
+    # 'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    # 'USER_ID_FIELD': 'id',
+    # 'USER_ID_CLAIM': 'user_id',
+    # 'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    # 'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    # 'TOKEN_TYPE_CLAIM': 'token_type',
+    # 'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    # 'JTI_CLAIM': 'jti',
+
+    # 'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    # 'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
 SPECTACULAR_SETTINGS = {
     # General schema metadata. Refer to spec for valid inputs
     # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#openapi-object
-    'TITLE': 'Sangvo API Document',
+    'TITLE': 'Short Quiz API Document',
     'DESCRIPTION': 'drf-specatular 를 사용해서 만든 API 문서입니다.',
-    # Optional: MAY contain "name", "url", "email"
-    'CONTACT': {'name': 'GNC', 'url': 'http://www.gncsolution.co.kr/', 'email': 'gncsolution@gncsolution.co.kr '},
     # Swagger UI를 좀더 편리하게 사용하기위해 기본옵션들을 수정한 값들입니다.
     'SWAGGER_UI_SETTINGS': {
         # https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/  <- 여기 들어가면 어떤 옵션들이 더 있는지 알수있습니다.
@@ -179,3 +204,7 @@ SPECTACULAR_SETTINGS = {
      # https://www.npmjs.com/package/swagger-ui-dist 해당 링크에서 최신버전을 확인후 취향에 따라 version을 수정해서 사용하세요.
     'SWAGGER_UI_DIST': '//unpkg.com/swagger-ui-dist@3.38.0',  # Swagger UI 버전을 조절할수 있습니다.
 }
+
+
+GOOGLE_OAUTH2_CLIENT_ID = config['GOOGLE_OAUTH2_CLIENT_ID']
+GOOGLE_OAUTH2_CLIENT_SECRET_KEY = config['GOOGLE_OAUTH2_CLIENT_SECRET_KEY']
